@@ -31,11 +31,11 @@ const PROJECTS = [
   },
   {
     num: '03',
-    name: 'Algorithm Visualizer',
-    desc: 'Interactive game AI engine built on optimized Minimax with alpha-beta pruning, reducing decision trees by 40%. Features smooth CSS animations and an unbeatable difficulty mode.',
-    tech: ['JavaScript', 'Minimax', 'Alpha-Beta Pruning', 'CSS'],
-    github: 'https://github.com/kumar-div/Tic-Tac-Toe',
-    live: 'https://tic-tac-toe-kumar-divs-projects.vercel.app/',
+    name: 'Ardent',
+    desc: 'Career Intelligence Platform that maps the invisible connections between your skills, professional goals, and career trajectories. Built to help users visualize and navigate their professional growth.',
+    tech: ['Next.js', 'React', 'TypeScript', 'Tailwind'],
+    github: 'https://github.com/div-kumar/Ardent',
+    live: 'https://ardent-beta.vercel.app/',
   },
   {
     num: '04',
