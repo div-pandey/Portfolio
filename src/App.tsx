@@ -258,10 +258,18 @@ export default function App() {
       if (p < 1) {
         frame = requestAnimationFrame(tick);
       } else {
-        setTimeout(() => setLoading(false), 400);
+        setTimeout(() => {
+          setLoading(false);
+          ScrollTrigger.refresh();
+        }, 400);
       }
     };
     frame = requestAnimationFrame(tick);
+
+    if (document.fonts) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
+
     return () => cancelAnimationFrame(frame);
   }, []);
 

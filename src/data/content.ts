@@ -131,6 +131,18 @@ export const projects: Project[] = [
     featured: false,
     color: '#8b5cf6',
   },
+  {
+    id: 'portfolio',
+    title: 'This Portfolio',
+    description: 'Hand-crafted developer portfolio with glassmorphic design, typewriter effects, and interactive micro-animations.',
+    longDescription: 'Hand-crafted developer portfolio with glassmorphic design, typewriter effects, CSS film grain, responsive layouts across all devices, and interactive micro-animations — zero templates used.',
+    tech: ['React', 'TypeScript', 'Vite', 'GSAP'],
+    image: '/images/portfolio.png',
+    liveUrl: 'https://div-portfolio-live.vercel.app/',
+    githubUrl: 'https://github.com/div-pandey/Portfolio',
+    featured: true,
+    color: '#8fbc8b',
+  },
 ];
 
 // ── Skills ──

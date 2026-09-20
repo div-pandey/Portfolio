@@ -468,6 +468,9 @@ button { font-family: inherit; border: none; background: none; color: inherit; c
    ════════════════════════ */
 .section {
   padding: var(--section-pad) var(--gutter);
+  position: relative;
+  background: var(--bg);
+  z-index: 1;
 }
 
 .section-header {

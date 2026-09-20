@@ -85,9 +85,9 @@ export const WORKS: Project[] = [
     category: 'Creative Dev · CSS Engineering',
     desc: 'Hand-crafted developer portfolio with glassmorphic design, typewriter effects, CSS film grain, responsive layouts across all devices, and interactive micro-animations — zero templates used.',
     tech: ['React', 'TypeScript', 'Vite', 'GSAP'],
-    github: 'https://github.com/div-pandey',
-    live: 'https://portfolio-of-divyansh.vercel.app/',
-    preview: 'https://portfolio-of-divyansh.vercel.app/',
+    github: 'https://github.com/div-pandey/Portfolio',
+    live: 'https://div-portfolio-live.vercel.app/',
+    preview: 'https://div-portfolio-live.vercel.app/',
     year: '2026',
   },
 ];
