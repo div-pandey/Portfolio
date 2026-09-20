@@ -1,51 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
+import Lenis from 'lenis';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { quotes } from './data/quotes';
+import { SelectedWorks } from './components/SelectedWorks/SelectedWorks.tsx';
 
 /* ═══ DATA ═══ */
 
 const ME = {
   name: 'Divyansh',
   email: 'div.pandey.tsx@gmail.com',
-  github: 'https://github.com/kumar-div',
+  github: 'https://github.com/div-pandey',
   linkedin: 'https://linkedin.com/in/div-kumar-cse',
   instagram: 'https://instagram.com/kumar__divyansh',
   resume: '/resume.pdf',
 };
 
-const PROJECTS = [
-  {
-    num: '01',
-    name: 'Apnaa Khana',
-    desc: 'Food ordering platform processing real payments for active users. Built for reliability with Next.js and Supabase, featuring real-time order tracking and live Razorpay payment integration.',
-    tech: ['Next.js', 'Supabase', 'Razorpay', 'TypeScript'],
-    github: 'https://github.com/kumar-div/Apnaa-Khana',
-    live: 'https://apnaa-khana-by-div.vercel.app/',
-  },
-  {
-    num: '02',
-    name: 'AI Resume Analyzer',
-    desc: 'Privacy-first LLM tool that parses and scores resumes locally using Ollama. Achieves 95%+ keyword extraction accuracy against ATS standards with zero cloud dependency.',
-    tech: ['Python', 'Ollama', 'NLP', 'PDF Parsing'],
-    github: 'https://github.com/kumar-div/ai-resume-analyzer',
-    live: 'https://div-ai-resume-analyzer.vercel.app/',
-  },
-  {
-    num: '03',
-    name: 'Ardent',
-    desc: 'Career Intelligence Platform that maps the invisible connections between your skills, professional goals, and career trajectories. Built to help users visualize and navigate their professional growth.',
-    tech: ['Next.js', 'React', 'TypeScript', 'Tailwind'],
-    github: 'https://github.com/div-kumar/Ardent',
-    live: 'https://ardent-beta.vercel.app/',
-  },
-  {
-    num: '04',
-    name: 'This Portfolio',
-    desc: 'Hand-crafted developer portfolio with glassmorphic design, typewriter effects, CSS film grain, responsive layouts across all devices, and interactive micro-animations — zero templates used.',
-    tech: ['React', 'TypeScript', 'Vite', 'CSS'],
-    github: 'https://github.com/kumar-div/my-portfolio',
-    live: 'https://portfolio-of-divyansh.vercel.app/',
-  },
-];
 
 const JOURNEY = [
   {
@@ -196,7 +166,27 @@ export default function App() {
 
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    // Initialize Global Lenis Smooth Scrolling
+    const lenis = new Lenis({
+      duration: 1.2,
+      lerp: 0.1,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.5,
+    });
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      lenis.destroy();
+      gsap.ticker.remove((time) => lenis.raf(time * 1000));
+    };
   }, []);
 
   const triggerToast = (msg: React.ReactNode, duration: number = 3000) => {
@@ -367,7 +357,7 @@ export default function App() {
       <CertificatesSection />
 
       {/* Projects */}
-      <ProjectsSection />
+      <SelectedWorks />
 
       {/* Journey */}
       <JourneySection />
@@ -434,50 +424,6 @@ function AboutSection() {
   );
 }
 
-function ProjectsSection() {
-  const { ref, visible } = useReveal(0.1);
-  return (
-    <section className="section" id="work">
-      <div ref={ref}>
-        <div className={`section-header reveal-scale ${visible ? 'visible' : ''}`}>
-          <h2 className="section-title">Selected Work</h2>
-          <span className="section-num">04</span>
-        </div>
-        <div className="projects-grid-wrapper">
-          <div className={`projects-grid reveal-stagger ${visible ? 'visible' : ''}`}>
-            {PROJECTS.map((p) => (
-              <div
-                key={p.num}
-                className="project-card"
-              >
-                <div className="project-card-top">
-                  <span className="project-card-num">{p.num}</span>
-                  <div className="project-card-links">
-                    {p.live && (
-                      <a href={p.live} target="_blank" rel="noopener noreferrer" className="project-card-link">
-                        Live ↗
-                      </a>
-                    )}
-                    <a href={p.github} target="_blank" rel="noopener noreferrer" className="project-card-link">
-                      Code ↗
-                    </a>
-                  </div>
-                </div>
-                <h3 className="project-card-name">{p.name}</h3>
-                <Typewriter as="p" className="project-card-desc" text={p.desc} speed={10} delay={300} />
-                <div className="project-card-tech">
-                  {p.tech.map((t) => (
-                    <span key={t}>{t}</span>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 function JourneySection() {
   const { ref, visible } = useReveal();
@@ -492,6 +438,10 @@ function JourneySection() {
           {JOURNEY.map((j, i) => (
             <div key={i} className="tl-row">
               <span className="tl-year">{j.year}</span>
+              <div className="tl-connector">
+                <div className="tl-dot" />
+                {i !== JOURNEY.length - 1 && <div className="tl-line" />}
+              </div>
               <div className="tl-content">
                 <h3 className="tl-role">{j.role}</h3>
                 <span className="tl-place">{j.place}</span>
@@ -620,12 +570,53 @@ function CapabilitiesSection() {
 
 function CertificatesSection() {
   const { ref, visible } = useReveal();
+
   const certs = [
-    { name: 'Advanced Software Engineering', org: 'Walmart Global Tech · Virtual Experience', year: '2026', link: '/certificates/walmart-swe.pdf' },
-    { name: 'Data Analytics', org: 'Deloitte · Virtual Experience', year: '2026', link: '/certificates/deloitte-data-analytics.pdf' },
-    { name: 'Cyber Security', org: 'Deloitte · Virtual Experience', year: '2026', link: '/certificates/deloitte-cyber-security.pdf' },
-    { name: 'Technology Program', org: 'Deloitte · Virtual Experience', year: '2026', link: '/certificates/deloitte-technology.pdf' },
-    { name: 'Git Version Control', org: 'GUVI · IIT Madras / HCL', year: '2026', link: '/certificates/guvi-git.jpg' }
+    {
+      name: 'Advanced Software Engineering',
+      org: 'Walmart Global Tech',
+      type: 'Virtual Experience',
+      year: '2026',
+      link: '/certificates/walmart-swe.pdf',
+      icon: 'W',
+      color: '#0071CE',
+    },
+    {
+      name: 'Data Analytics',
+      org: 'Deloitte',
+      type: 'Virtual Experience',
+      year: '2026',
+      link: '/certificates/deloitte-data-analytics.pdf',
+      icon: 'D',
+      color: '#86BC25',
+    },
+    {
+      name: 'Cyber Security',
+      org: 'Deloitte',
+      type: 'Virtual Experience',
+      year: '2026',
+      link: '/certificates/deloitte-cyber-security.pdf',
+      icon: 'D',
+      color: '#86BC25',
+    },
+    {
+      name: 'Technology Program',
+      org: 'Deloitte',
+      type: 'Virtual Experience',
+      year: '2026',
+      link: '/certificates/deloitte-technology.pdf',
+      icon: 'D',
+      color: '#86BC25',
+    },
+    {
+      name: 'Git Version Control',
+      org: 'GUVI · IIT Madras / HCL',
+      type: 'Certified',
+      year: '2026',
+      link: '/certificates/guvi-git.jpg',
+      icon: 'G',
+      color: '#8B5CF6',
+    },
   ];
 
   return (
@@ -635,15 +626,50 @@ function CertificatesSection() {
           <h2 className="section-title">Credentials</h2>
           <span className="section-num">03</span>
         </div>
+
+        <div className="certs-stat-bar">
+          <div className="certs-stat">
+            <span className="certs-stat-num">5</span>
+            <span className="certs-stat-label">Certificates</span>
+          </div>
+          <div className="certs-stat-divider" />
+          <div className="certs-stat">
+            <span className="certs-stat-num">3</span>
+            <span className="certs-stat-label">Issuers</span>
+          </div>
+          <div className="certs-stat-divider" />
+          <div className="certs-stat">
+            <span className="certs-stat-num">2026</span>
+            <span className="certs-stat-label">Cohort</span>
+          </div>
+        </div>
+
         <div className="certs-grid">
           {certs.map((c, i) => (
-            <a key={i} href={c.link} target="_blank" rel="noopener noreferrer" className="cert-card">
+            <a
+              key={i}
+              href={c.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cert-card"
+              style={{ '--cert-color': c.color } as React.CSSProperties}
+            >
+              <div className="cert-shimmer" />
+
+              <div className="cert-badge" style={{ background: c.color + '18', border: `1px solid ${c.color}40` }}>
+                <span className="cert-badge-letter" style={{ color: c.color }}>{c.icon}</span>
+              </div>
+
               <div className="cert-info">
-                <span className="cert-year">{c.year}</span>
+                <div className="cert-meta-row">
+                  <span className="cert-type">{c.type}</span>
+                  <span className="cert-year">{c.year}</span>
+                </div>
                 <h3 className="cert-name">{c.name}</h3>
                 <span className="cert-org">{c.org}</span>
               </div>
-              <div className="cert-barcode">View ↗</div>
+
+              <div className="cert-arrow">↗</div>
             </a>
           ))}
         </div>

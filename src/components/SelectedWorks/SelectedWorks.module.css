@@ -1,0 +1,267 @@
+/* ══════════════════════════════════════════════════════
+   SELECTED WORKS — ITom Style Pinned Horizontal Scroll
+   ══════════════════════════════════════════════════════ */
+
+.section {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* Takes up full screen when pinned */
+  overflow: hidden;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionHeader {
+  flex-shrink: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 40px var(--gutter);
+  border-bottom: 1px solid var(--border);
+}
+
+.sectionTitle {
+  font-family: var(--serif);
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  color: var(--text-bright);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+.sectionNum {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+/* ── Slider Container ──────────────────────────────── */
+.sliderViewport {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* Hide horizontal overflow natively */
+  display: flex;
+  align-items: center;
+}
+
+.track {
+  display: flex;
+  flex-wrap: nowrap;
+  width: max-content; /* Ensure track is as wide as its children */
+  height: 80%; /* Leave padding top and bottom */
+  padding: 0 var(--gutter);
+  will-change: transform;
+}
+
+/* ── Individual project card ───────────────────────── */
+.projectItem {
+  flex: 0 0 clamp(400px, 45vw, 600px);
+  height: 100%;
+  margin-right: clamp(40px, 8vw, 120px);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Clear margin for the last card so it stops perfectly */
+.projectItem:last-child {
+  margin-right: 0;
+}
+
+.imageWrap {
+  width: 100%;
+  flex: 1; /* Take up all available vertical space */
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+  display: block;
+  text-decoration: none;
+  background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-alt) 50%, var(--bg) 100%);
+  will-change: transform;
+}
+
+.projectImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.8;
+  transition: opacity 0.4s ease;
+}
+
+.imageWrap:hover .projectImage {
+  opacity: 1;
+}
+
+/* ── iframe live preview ──────────────────────────── */
+.iframeContainer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 11px; /* 1px inside the card border-radius */
+  background: #0a0a0a;
+}
+
+/* The iframe is rendered at desktop width then scaled down to fit */
+.previewIframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Render at full desktop resolution… */
+  width: 1440px;
+  height: 900px;
+  border: none;
+  /* …then shrink-to-fit the container. The scale is calculated by JS via CSS
+     custom properties, but a sensible default keeps it from flashing huge. */
+  transform: scale(var(--iframe-scale, 0.38));
+  transform-origin: top left;
+  pointer-events: none; /* The overlay handles all clicks */
+  /* Fade in once loaded */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.previewIframe[data-loaded] {
+  opacity: 1;
+}
+
+/* Transparent overlay — captures hover/clicks and sends user to the live link */
+.iframeOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  cursor: pointer;
+  /* Light gradient from bottom for readability */
+  background: linear-gradient(to top, rgba(0,0,0,0.35) 0%, transparent 40%);
+}
+
+.imageWrap:hover .iframeOverlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.25) 0%, transparent 50%);
+}
+
+/* Fallback if no real image is provided */
+.imageFallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.imageFallbackName {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3vw, 3rem);
+  color: var(--text-bright);
+  opacity: 0.1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+
+/* ── Text Content Below Image ───────────────────────── */
+.cardContent {
+  flex-shrink: 0;
+  padding-top: 24px;
+  will-change: opacity, transform;
+}
+
+.projectTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.projectIndex {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--accent);
+  letter-spacing: 0.12em;
+  opacity: 0.7;
+}
+
+.projectLinks {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.projectLink {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.2s ease;
+}
+
+.projectLink:hover {
+  color: var(--accent);
+}
+
+.projectName {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 3vw, 2.8rem);
+  color: var(--text-bright);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  margin-top: 12px;
+}
+
+.projectDesc {
+  font-size: 0.95rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-top: 12px;
+  max-width: 90%;
+}
+
+.projectMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 16px;
+}
+
+.projectTech {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.projectYear {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--accent);
+  opacity: 0.6;
+  letter-spacing: 0.1em;
+}
+
+/* ── Responsive ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .projectItem {
+    flex: 0 0 clamp(300px, 75vw, 400px);
+    margin-right: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .track {
+    height: 70%;
+  }
+  .sectionHeader {
+    padding: 24px var(--gutter);
+  }
+}
