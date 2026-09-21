@@ -250,11 +250,12 @@
 }
 
 /* ── Responsive ─────────────────────────────────────── */
+/* These rules ONLY adjust card sizes — never fight GSAP's transform/pin */
 
 /* Tablets landscape */
 @media (max-width: 1024px) {
   .projectItem {
-    flex: 0 0 clamp(340px, 60vw, 480px);
+    flex: 0 0 clamp(320px, 60vw, 480px);
     margin-right: clamp(24px, 5vw, 60px);
   }
   .projectName {
@@ -262,134 +263,89 @@
   }
 }
 
-@media (max-width: 900px) {
-  .projectItem {
-    flex: 0 0 clamp(300px, 75vw, 420px);
-    margin-right: 32px;
-  }
-}
-
-/* Tablets portrait & mobile — switch to native horizontal scroll */
-@media (max-width: 768px) {
+/* Tablets portrait */
+@media (max-width: 820px) {
   .section {
-    height: auto;
-    overflow: visible;
-    /* Reset the pinned GSAP section to a natural flow section */
+    height: 100dvh; /* Use dvh so iOS safari address bar doesn't shrink it */
   }
-
-  .sectionHeader {
-    padding: 32px var(--gutter) 24px;
-  }
-
-  .sectionTitle {
-    font-size: clamp(2rem, 6vw, 3rem);
-  }
-
-  .sliderViewport {
-    overflow-x: auto;
-    overflow-y: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    /* Custom scrollbar */
-    scrollbar-width: none;
-    padding-bottom: 40px;
-  }
-  .sliderViewport::-webkit-scrollbar {
-    display: none;
-  }
-
-  .track {
-    height: auto;
-    min-height: 480px;
-    padding: 0 var(--gutter);
-    /* Allow the track to be scrolled by touch */
-    transform: none !important; /* Override any GSAP transform */
-    gap: 0;
-  }
-
   .projectItem {
-    flex: 0 0 82vw;
-    height: 480px;
-    margin-right: 20px;
-    scroll-snap-align: start;
+    flex: 0 0 clamp(280px, 78vw, 380px);
+    margin-right: 28px;
   }
-
-  .projectItem:last-child {
-    margin-right: var(--gutter);
+  .sectionHeader {
+    padding: 28px var(--gutter);
   }
-
+  .sectionTitle {
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+  }
   .cardContent {
     padding-top: 16px;
   }
-
   .projectName {
-    font-size: clamp(1.4rem, 5vw, 1.8rem);
+    font-size: clamp(1.3rem, 4.5vw, 1.8rem);
     margin-top: 8px;
   }
-
   .projectDesc {
     font-size: 0.82rem;
     margin-top: 8px;
     max-width: 100%;
   }
-
   .projectMeta {
-    margin-top: 16px;
-    padding-top: 12px;
+    margin-top: 14px;
+    padding-top: 10px;
   }
 }
 
-/* Mobile */
+/* Mobile phones */
 @media (max-width: 480px) {
+  .section {
+    height: 100dvh;
+  }
   .sectionHeader {
-    padding: 24px var(--gutter) 20px;
+    padding: 20px var(--gutter);
   }
-
-  .sliderViewport {
-    padding-bottom: 32px;
+  .sectionTitle {
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
   }
-
   .projectItem {
-    flex: 0 0 88vw;
-    height: 440px;
-    margin-right: 16px;
+    flex: 0 0 clamp(260px, 88vw, 340px);
+    margin-right: 20px;
   }
-
   .imageWrap {
     border-radius: 10px;
   }
-
   .cardContent {
     padding-top: 12px;
   }
-
   .projectName {
-    font-size: clamp(1.2rem, 5.5vw, 1.6rem);
+    font-size: clamp(1.1rem, 5vw, 1.5rem);
   }
-
   .projectDesc {
     font-size: 0.78rem;
     line-height: 1.5;
   }
-
   .projectMeta {
-    margin-top: 12px;
-    padding-top: 10px;
+    margin-top: 10px;
+    padding-top: 8px;
   }
-
   .projectLinks {
-    gap: 12px;
+    gap: 10px;
+  }
+  .projectLink {
+    font-size: 0.6rem;
   }
 }
 
 /* Small phones */
 @media (max-width: 390px) {
   .projectItem {
-    flex: 0 0 90vw;
-    height: 400px;
+    flex: 0 0 clamp(240px, 90vw, 300px);
+    margin-right: 16px;
   }
-
   .projectName {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
+  }
+  .projectDesc {
+    font-size: 0.74rem;
   }
 }
