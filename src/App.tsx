@@ -4,6 +4,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { quotes } from './data/quotes';
 import { SelectedWorks } from './components/SelectedWorks/SelectedWorks.tsx';
+import { OpenSourceSection } from './components/OpenSource/OpenSourceSection.tsx';
 
 /* ═══ DATA ═══ */
 
@@ -49,6 +50,7 @@ const SKILLS = [
   'Python', 'Supabase', 'PostgreSQL', 'Tailwind', 'Git',
   'REST APIs', 'CSS/SCSS', 'Linux', 'Vercel',
 ];
+
 
 
 
@@ -302,6 +304,7 @@ export default function App() {
               <a href="#capabilities" className="nav-link" onClick={(e) => handleNavClick(e, '#capabilities')}>Capabilities</a>
               <a href="#credentials" className="nav-link" onClick={(e) => handleNavClick(e, '#credentials')}>Credentials</a>
               <a href="#work" className="nav-link" onClick={(e) => handleNavClick(e, '#work')}>Work</a>
+              <a href="#opensource" className="nav-link" onClick={(e) => handleNavClick(e, '#opensource')}>Open Source</a>
               <a href="#journey" className="nav-link" onClick={(e) => handleNavClick(e, '#journey')}>Journey</a>
               <a href="#contact" className="nav-link" onClick={(e) => handleNavClick(e, '#contact')}>Contact</a>
             </div>
@@ -366,6 +369,9 @@ export default function App() {
 
       {/* Projects */}
       <SelectedWorks />
+
+      {/* Open Source / npm */}
+      <OpenSourceSection />
 
       {/* Journey */}
       <JourneySection />
@@ -433,6 +439,9 @@ function AboutSection() {
 }
 
 
+
+
+
 function JourneySection() {
   const { ref, visible } = useReveal();
   return (
@@ -440,7 +449,7 @@ function JourneySection() {
       <div ref={ref} className={`reveal-blur ${visible ? 'visible' : ''}`}>
         <div className="section-header">
           <h2 className="section-title">Journey</h2>
-          <span className="section-num">05</span>
+          <span className="section-num">06</span>
         </div>
         <div className="timeline">
           {JOURNEY.map((j, i) => (
