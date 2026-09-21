@@ -384,26 +384,26 @@
 
 /* ── Interactive Terminal Window ── */
 .terminalWindow {
-  background: #0d0d0c;
-  border: 1px solid #242422;
-  border-radius: 12px;
+  background: #0b0c0b;
+  border: 1px solid #20221f;
+  border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65);
 }
 
 .terminalBar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  background: #141413;
-  border-bottom: 1px solid #20201e;
+  padding: 11px 16px;
+  background: #121412;
+  border-bottom: 1px solid #1c1e1b;
 }
 
 .terminalDots {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 7px;
 }
 
 .terminalDot {
@@ -412,74 +412,159 @@
   border-radius: 50%;
 }
 
-.terminalDotClose { background: #ff5f56; opacity: 0.8; }
-.terminalDotMin { background: #ffbd2e; opacity: 0.8; }
-.terminalDotMax { background: #27c93f; opacity: 0.8; }
+.terminalDotClose { background: #ff5f56; opacity: 0.85; }
+.terminalDotMin { background: #ffbd2e; opacity: 0.85; }
+.terminalDotMax { background: #27c93f; opacity: 0.85; }
 
 .terminalTitle {
   font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 0.68rem;
+  font-size: 0.7rem;
   color: var(--text-dim, #6b6f69);
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
 }
 
 .terminalAction {
   font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: 0.62rem;
+  font-size: 0.64rem;
   color: var(--accent, #8fbc8b);
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 .terminalBody {
-  padding: 16px 18px;
+  padding: clamp(16px, 3vw, 24px);
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  font-family: var(--mono, 'JetBrains Mono', monospace);
-  font-size: clamp(0.72rem, 1.8vw, 0.82rem);
-  line-height: 1.6;
-  overflow-x: auto;
-}
-
-.terminalLine {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
   gap: 16px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  font-family: var(--mono, 'JetBrains Mono', monospace);
+  overflow-x: auto;
+  scrollbar-width: thin;
 }
 
-.terminalLine:hover {
-  background: rgba(143, 188, 139, 0.08);
-}
-
-.terminalLineLeft {
+.terminalPromptRow {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  white-space: nowrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.86rem;
 }
 
-.terminalLinePrompt {
+.terminalPromptSign {
   color: var(--accent, #8fbc8b);
   user-select: none;
+  font-weight: 700;
+}
+
+.terminalPromptCmd {
+  color: var(--text-bright, #e8ede6);
   font-weight: 600;
 }
 
-.terminalLineCmd {
-  color: var(--text-bright, #e8ede6);
-  font-weight: 500;
+.terminalBanner {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent, #8fbc8b);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 4px;
 }
 
-.terminalLineComment {
-  color: #5c635b;
-  font-style: italic;
-  font-size: 0.75rem;
-  white-space: nowrap;
+.terminalColumns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  align-items: start;
+}
+
+.terminalCol {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.terminalGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.groupCategory {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-bright, #e8ede6);
+  letter-spacing: 0.04em;
+}
+
+.groupDivider {
+  color: #333831;
+  font-size: 0.7rem;
+  line-height: 1;
   user-select: none;
+  letter-spacing: -0.02em;
+  margin-bottom: 2px;
+}
+
+.terminalItemList {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.terminalCommandItem {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.terminalCommandItem:hover {
+  background: rgba(143, 188, 139, 0.1);
+}
+
+.terminalCommandItem.itemCopied {
+  background: rgba(143, 188, 139, 0.2);
+}
+
+.itemCmd {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-bright, #e8ede6);
+  min-width: 80px;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+}
+
+.terminalCommandItem:hover .itemCmd {
+  color: var(--accent, #8fbc8b);
+}
+
+.itemArrow {
+  font-size: 0.75rem;
+  color: var(--accent, #8fbc8b);
+  opacity: 0.85;
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.itemTarget {
+  font-size: 0.8rem;
+  color: #8f978b;
+  word-break: break-word;
+  transition: color 0.15s ease;
+}
+
+.terminalCommandItem:hover .itemTarget {
+  color: #cdd4c8;
+}
+
+.itemCopiedBadge {
+  font-size: 0.65rem;
+  color: var(--accent, #8fbc8b);
+  font-weight: 600;
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 /* ── Features List ── */

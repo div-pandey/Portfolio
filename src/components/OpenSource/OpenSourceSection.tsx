@@ -244,8 +244,8 @@ export function OpenSourceSection({ packages = NPM_PACKAGES }: OpenSourceSection
                   )}
                 </div>
 
-                {/* Interactive Terminal Demo */}
-                {pkg.terminalDemo && pkg.terminalDemo.lines.length > 0 && (
+                {/* Terminal Commands Dashboard / lcr list */}
+                {pkg.terminal && (
                   <div className={styles.terminalWindow}>
                     <div className={styles.terminalBar}>
                       <div className={styles.terminalDots}>
@@ -254,35 +254,88 @@ export function OpenSourceSection({ packages = NPM_PACKAGES }: OpenSourceSection
                         <span className={`${styles.terminalDot} ${styles.terminalDotMax}`} />
                       </div>
                       <span className={styles.terminalTitle}>
-                        zsh — {pkg.terminalDemo.cwd || '~/my-app'}
+                        zsh — {pkg.terminal.promptCmd || 'terminal'}
                       </span>
-                      <span className={styles.terminalAction}>click line to copy</span>
+                      <span className={styles.terminalAction}>click command to copy</span>
                     </div>
 
                     <div className={styles.terminalBody}>
-                      {pkg.terminalDemo.lines.map((line, lIdx) => {
-                        const lineKey = `term-${idx}-${lIdx}`;
-                        const isCopied = copiedKey === lineKey;
+                      {pkg.terminal.promptCmd && (
+                        <div className={styles.terminalPromptRow}>
+                          <span className={styles.terminalPromptSign}>$</span>
+                          <span className={styles.terminalPromptCmd}>{pkg.terminal.promptCmd}</span>
+                        </div>
+                      )}
 
-                        return (
-                          <div
-                            key={lIdx}
-                            className={styles.terminalLine}
-                            onClick={() => copyToClipboard(line.cmd, lineKey)}
-                            title={`Click to copy: ${line.cmd}`}
-                          >
-                            <div className={styles.terminalLineLeft}>
-                              <span className={styles.terminalLinePrompt}>$</span>
-                              <span className={styles.terminalLineCmd}>
-                                {line.cmd}
-                              </span>
+                      {pkg.terminal.bannerTitle && (
+                        <div className={styles.terminalBanner}>{pkg.terminal.bannerTitle}</div>
+                      )}
+
+                      {pkg.terminal.groups && pkg.terminal.groups.length > 0 && (() => {
+                        const groups = pkg.terminal.groups!;
+                        const hasGitShortcuts = groups.some((g) => g.category === 'Git shortcuts');
+
+                        let col1 = groups;
+                        let col2: typeof groups = [];
+
+                        if (hasGitShortcuts) {
+                          col1 = groups.filter((g) => g.category !== 'Git shortcuts');
+                          col2 = groups.filter((g) => g.category === 'Git shortcuts');
+                        } else if (groups.length > 2) {
+                          const half = Math.ceil(groups.length / 2);
+                          col1 = groups.slice(0, half);
+                          col2 = groups.slice(half);
+                        }
+
+                        const renderGroup = (group: typeof groups[0], gIdx: number) => (
+                          <div key={group.category || gIdx} className={styles.terminalGroup}>
+                            <div className={styles.groupCategory}>{group.category}</div>
+                            <div className={styles.groupDivider}>────────────────────</div>
+                            <div className={styles.terminalItemList}>
+                              {group.items.map((item, iIdx) => {
+                                const cmdKey = `term-${idx}-${group.category}-${item.cmd}-${iIdx}`;
+                                const isCopied = copiedKey === cmdKey;
+                                const copyVal = item.copyValue || item.cmd;
+
+                                return (
+                                  <div
+                                    key={iIdx}
+                                    className={`${styles.terminalCommandItem} ${isCopied ? styles.itemCopied : ''}`}
+                                    onClick={() => copyToClipboard(copyVal, cmdKey)}
+                                    title={`Click to copy: ${copyVal}`}
+                                  >
+                                    <span className={styles.itemCmd}>{item.cmd}</span>
+                                    <span className={styles.itemArrow}>→</span>
+                                    <span className={styles.itemTarget}>{item.target}</span>
+                                    {isCopied && (
+                                      <span className={styles.itemCopiedBadge}>✓ copied</span>
+                                    )}
+                                  </div>
+                                );
+                              })}
                             </div>
-                            <span className={styles.terminalLineComment}>
-                              {isCopied ? '✓ Copied to clipboard' : line.comment || ''}
-                            </span>
                           </div>
                         );
-                      })}
+
+                        return (
+                          <div className={styles.terminalColumns}>
+                            <div className={styles.terminalCol}>
+                              {col1.map(renderGroup)}
+                            </div>
+                            {col2.length > 0 && (
+                              <div className={styles.terminalCol}>
+                                {col2.map(renderGroup)}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })()}
+
+                      {pkg.terminal.rawOutput && (
+                        <pre style={{ margin: 0, whiteSpace: 'pre-wrap', color: 'var(--text-bright)' }}>
+                          {pkg.terminal.rawOutput}
+                        </pre>
+                      )}
                     </div>
                   </div>
                 )}

@@ -13,10 +13,22 @@ export interface PackageFeature {
   detail: string;
 }
 
-export interface TerminalLine {
+export interface TerminalCommandItem {
   cmd: string;
-  output?: string;
-  comment?: string;
+  target: string;
+  copyValue?: string;
+}
+
+export interface TerminalGroup {
+  category: string;
+  items: TerminalCommandItem[];
+}
+
+export interface PackageTerminal {
+  promptCmd?: string;
+  bannerTitle?: string;
+  groups?: TerminalGroup[];
+  rawOutput?: string;
 }
 
 export interface NpmPackage {
@@ -48,11 +60,8 @@ export interface NpmPackage {
   color?: string;
   /** Core features / capabilities */
   features?: PackageFeature[];
-  /** Terminal demonstration lines showing CLI usage */
-  terminalDemo?: {
-    cwd?: string;
-    lines: TerminalLine[];
-  };
+  /** Terminal output / commands preview (e.g. lcr list dashboard) */
+  terminal?: PackageTerminal;
   /** Keywords or search tags */
   tags?: string[];
 }
@@ -104,16 +113,63 @@ export const NPM_PACKAGES: NpmPackage[] = [
           'Environment diagnostic tool: checks Node, npm, Git versions, shim health, and resolves PowerShell conflicts.',
       },
     ],
-    terminalDemo: {
-      cwd: '~/my-app',
-      lines: [
-        { cmd: 'dev', comment: '→ npm run dev (or vite / next)' },
-        { cmd: 'build', comment: '→ npm run build' },
-        { cmd: 'test', comment: '→ npm test' },
-        { cmd: 'gs', comment: '→ git status' },
-        { cmd: 'ga .', comment: '→ git add .' },
-        { cmd: 'gc -m "feat: ship cli"', comment: '→ git commit -m ...' },
-        { cmd: 'gp', comment: '→ git push' },
+    terminal: {
+      promptCmd: 'lcr list',
+      bannerTitle: 'LOCAL COMMAND RUNNER',
+      groups: [
+        {
+          category: 'Project',
+          items: [
+            { cmd: 'dev', target: 'npm run dev' },
+            { cmd: 'build', target: 'npm run build' },
+            { cmd: 'test', target: 'npm test' },
+            { cmd: 'lint', target: 'npm run lint' },
+          ],
+        },
+        {
+          category: 'Git shortcuts',
+          items: [
+            { cmd: 'gs', target: 'git status' },
+            { cmd: 'ga', target: 'git add .' },
+            { cmd: 'gc', target: 'git commit' },
+            { cmd: 'gp', target: 'git push' },
+            { cmd: 'gpl', target: 'git pull' },
+            { cmd: 'gb', target: 'git branch' },
+            { cmd: 'gco', target: 'git checkout' },
+            { cmd: 'gm', target: 'git merge' },
+            { cmd: 'gl', target: 'git log --oneline' },
+            { cmd: 'gd', target: 'git diff' },
+            { cmd: 'gst', target: 'git stash' },
+          ],
+        },
+        {
+          category: 'Git workflows',
+          items: [
+            {
+              cmd: 'git-setup',
+              target: 'Initialize Git, commit, connect to GitHub, and push',
+              copyValue: 'lcr git-setup',
+            },
+          ],
+        },
+        {
+          category: 'Workflows',
+          items: [
+            {
+              cmd: 'ci',
+              target: 'lint → test → build',
+              copyValue: 'lcr exec ci',
+            },
+          ],
+        },
+        {
+          category: 'Tools',
+          items: [
+            { cmd: 'node', target: 'v24.x.x', copyValue: 'node -v' },
+            { cmd: 'npm', target: 'v11.x.x', copyValue: 'npm -v' },
+            { cmd: 'git', target: 'v2.x.x', copyValue: 'git --version' },
+          ],
+        },
       ],
     },
     tags: [
@@ -139,6 +195,7 @@ export const NPM_PACKAGES: NpmPackage[] = [
     version: '1.0.0',
     license: 'MIT',
     color: '#8fbc8b',
+    terminal: { ... },
     features: [...],
     tags: ['cli', 'typescript'],
   },
