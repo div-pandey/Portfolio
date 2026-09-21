@@ -88,6 +88,7 @@ export const WORKS: Project[] = [
     github: 'https://github.com/div-pandey/Portfolio',
     live: 'https://div-portfolio-live.vercel.app/',
     preview: 'https://div-portfolio-live.vercel.app/',
+    forceImage: true,
     year: '2026',
   },
 ];

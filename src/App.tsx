@@ -262,18 +262,22 @@ export default function App() {
       } else {
         setTimeout(() => {
           setLoading(false);
-          ScrollTrigger.refresh();
-        }, 400);
+        }, 300);
       }
     };
     frame = requestAnimationFrame(tick);
 
-    if (document.fonts) {
-      document.fonts.ready.then(() => ScrollTrigger.refresh());
-    }
-
     return () => cancelAnimationFrame(frame);
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => {
+        ScrollTrigger.refresh();
+      }, 150);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
 
   return (
     <>

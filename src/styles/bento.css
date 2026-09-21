@@ -33,7 +33,6 @@
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  scroll-behavior: smooth;
   scrollbar-width: thin;
   scrollbar-color: #333 transparent;
   overflow-x: hidden;
