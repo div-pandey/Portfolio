@@ -31,7 +31,7 @@ export function SelectedWorks() {
         scrollTrigger: {
           trigger: section,
           pin: true,
-          scrub: 1.2,
+          scrub: 0.5,
           anticipatePin: 1,
           invalidateOnRefresh: true,
           // Scroll distance precisely matches track traversal

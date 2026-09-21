@@ -166,28 +166,30 @@ export default function App() {
     }
     window.scrollTo(0, 0);
 
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-
-    // Initialize Global Lenis Smooth Scrolling
+    // Initialize Global Lenis Smooth Scrolling with responsive, non-sluggish physics
     const lenis = new Lenis({
-      duration: 1.2,
-      lerp: 0.1,
+      lerp: 0.085, // silky smooth, immediate response without input lag
+      wheelMultiplier: 0.9, // natural wheel sensitivity
+      touchMultiplier: 1.0, // 1:1 on touch
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.5,
+      syncTouch: false, // native hardware-accelerated momentum on mobile
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => {
-      lenis.raf(time * 1000);
+    lenis.on('scroll', (e: any) => {
+      ScrollTrigger.update();
+      setScrolled(e.scroll > 50);
     });
-    gsap.ticker.lagSmoothing(0);
+
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(500, 33); // Absorb frame spikes gracefully
 
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      gsap.ticker.remove(updateTicker);
       lenis.destroy();
-      gsap.ticker.remove((time) => lenis.raf(time * 1000));
     };
   }, []);
 
@@ -281,6 +283,9 @@ export default function App() {
 
   return (
     <>
+      {/* Hardware-accelerated ambient lighting layer (no scroll repaint) */}
+      <div className="bg-ambient" aria-hidden="true" />
+
       {/* Preloader */}
       <div className={`preloader ${!loading ? 'done' : ''}`}>
         <span className="preloader-counter">{String(count).padStart(3, '0')}</span>
