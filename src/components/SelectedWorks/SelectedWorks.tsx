@@ -18,6 +18,9 @@ export function SelectedWorks() {
       const track = trackRef.current;
       if (!section || !track) return;
 
+      // On mobile (<= 768px), disable GSAP pinning — use native CSS scroll instead
+      if (window.innerWidth <= 768) return;
+
       // Calculate how far the track needs to move horizontally
       const getScrollAmount = () => {
         let trackWidth = track.scrollWidth;
@@ -72,6 +75,7 @@ export function SelectedWorks() {
     },
     { scope: sectionRef }
   );
+
 
   return (
     <section ref={sectionRef} className={styles.section} id="work">
